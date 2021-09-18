@@ -1,20 +1,15 @@
 #!/usr/bin/python3
 #print ("Hello World")
-
-from pythonping import ping
+import os
 from gpiozero import LED
 import time
 
-def get_ping_res (site):
-    target_site = ping(site, count=1)
-    for entry in target_site:
-        if entry.message != None:
-            return True
-    return False
+
 
 def toggle_ping_led (site, led):
-    available = get_ping_res(site)
-    if available:
+    available = os.system(f"fping -q -r 0 -t 500 {site}")
+    #print (available)
+    if available == 0:
         led.on()
         #print(led)
     else:
@@ -22,10 +17,10 @@ def toggle_ping_led (site, led):
         #print(led)
 
 sites = {
-    "google.de":LED(17),
-    "1.1.1.1":LED(18),
-    "ellpeck.de":LED(27),
-    "github.com":LED(22)
+    "8.8.8.8":LED(22),
+    "1.1.1.1":LED(27),
+    "192.168.0.1":LED(18),
+    "192.168.1.1":LED(17)
 }
 
 while True:
